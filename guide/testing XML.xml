@@ -1,0 +1,41 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://services.metlife.com/standards/svcinfo/v1" xmlns:oas="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:urn="urn:com.metlife.pc.messaging.services.pfm.orderretrieve" xmlns:v11="http://services.metlife.com/standards/gatewaysvchdr/v1">
+   <soapenv:Header>
+      <v1:ServiceRequestInfo>
+         <v1:RequestDateTime>2014-12-13T15:04:32</v1:RequestDateTime>
+         <v1:RequestID attr1="val1" attr2="val2">200120151607</v1:RequestID>
+         <v1:SessionID>200120151607</v1:SessionID>
+         <v1:UserID UserType="">NONE</v1:UserID>
+      </v1:ServiceRequestInfo>
+      <oas:Security>
+         <oas:UsernameToken>
+            <oas:Username>PCdpwebSvcs_D</oas:Username>
+            <oas:Password>metlife1</oas:Password>
+         </oas:UsernameToken>
+      </oas:Security>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn:getOrderInfoGenNum>
+         <v11:RequestHeader>
+            <v11:Met_Multi_Tenancy>
+               <v11:Nation>USA</v11:Nation>
+            </v11:Met_Multi_Tenancy>
+            <v11:TransType>PFMORDER</v11:TransType>
+         </v11:RequestHeader>
+         <arg0 bibek="x" hi="hello">
+            <cientSSN>666441864</cientSSN>
+            <clientAddress1>2350 20AMBERSIDE 20WAY</clientAddress1>
+            <clientAddress2>Manhatten Street</clientAddress2>
+            <clientBDate>11141981</clientBDate>
+            <clientCity>New York</clientCity>
+            <clientFirstName>Isabella</clientFirstName>
+            <clientLastName>Thomas</clientLastName>
+            <clientState>FL</clientState>
+            <clientZip>335448781</clientZip>
+            <lob>A</lob>
+            <orderId>1HH3211</orderId>
+            <policyEffDate>2015-06-25</policyEffDate>
+            <newRenewalInd>B</newRenewalInd>
+         </arg0>
+      </urn:getOrderInfoGenNum>
+   </soapenv:Body>
+</soapenv:Envelope>
