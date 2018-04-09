@@ -19,7 +19,7 @@
             <v11:Met_Multi_Tenancy>
                <v11:Nation>USA</v11:Nation>
             </v11:Met_Multi_Tenancy>
-            <v11:TransType>PFMORDER</v11:TransType>
+            <v11:TransType>TransType</v11:TransType>
          </v11:RequestHeader>
          <arg0 bibek="x" hi="hello">
             <cientSSN>666441864</cientSSN>
