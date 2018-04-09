@@ -8,8 +8,8 @@
       </v1:ServiceRequestInfo>
       <oas:Security>
          <oas:UsernameToken>
-            <oas:Username>PCdpwebSvcs_D</oas:Username>
-            <oas:Password>metlife1</oas:Password>
+            <oas:Username>sample_UserName</oas:Username>
+            <oas:Password>sample_Password</oas:Password>
          </oas:UsernameToken>
       </oas:Security>
    </soapenv:Header>
@@ -23,14 +23,14 @@
          </v11:RequestHeader>
          <arg0 bibek="x" hi="hello">
             <cientSSN>666441864</cientSSN>
-            <clientAddress1>2350 20AMBERSIDE 20WAY</clientAddress1>
-            <clientAddress2>Manhatten Street</clientAddress2>
-            <clientBDate>11141981</clientBDate>
+            <clientAddress1>Address1</clientAddress1>
+            <clientAddress2>Address2</clientAddress2>
+            <clientBDate>29101991</clientBDate>
             <clientCity>New York</clientCity>
-            <clientFirstName>Isabella</clientFirstName>
-            <clientLastName>Thomas</clientLastName>
+            <clientFirstName>FirstName</clientFirstName>
+            <clientLastName>LastName</clientLastName>
             <clientState>FL</clientState>
-            <clientZip>335448781</clientZip>
+            <clientZip>123456</clientZip>
             <lob>A</lob>
             <orderId>1HH3211</orderId>
             <policyEffDate>2015-06-25</policyEffDate>
