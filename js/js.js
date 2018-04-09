@@ -161,9 +161,12 @@ function makeXMLTree(inElementId,outElementId,cType)
 		outElement.style.display = 'block';
 		
 		var buttonElement = document.getElementById(outElementId + "Button");
-		buttonElement.value = "Show Raw XML" ;
-		buttonElement.onclick = function() {showRawXML(inElementId,outElementId,cType);}
-		
+		if(buttonElement)
+		{
+			buttonElement.value = "Show Raw XML" ;
+			buttonElement.onclick = function() {showRawXML('sourceXML','inDiv','in');showRawXML('targetXML','outDiv','out');}
+			//buttonElement.onclick = function() {showRawXML(inElementId,outElementId,cType);}
+		}
 		idCounter = 0 ;
 	}
 }
@@ -174,8 +177,12 @@ function showRawXML(inElementId,outElementId,cType)
 	var outElement	= document.getElementById(outElementId);
 	
 	var buttonElement = document.getElementById(outElementId + "Button");
-	buttonElement.value = "Make XML Tree" ;
-	buttonElement.onclick = function() {makeXMLTree(inElementId,outElementId,cType);}
+	if(buttonElement)
+	{
+		buttonElement.value = "Make XML Tree" ;
+		//buttonElement.onclick = function() {makeXMLTree(inElementId,outElementId,cType);}
+		buttonElement.onclick = function() {makeXMLTree('sourceXML','inDiv','in');makeXMLTree('targetXML','outDiv','out');}
+	}
 	
 	outElement.style.display = 'none';
 	inElement.style.display = 'block';
@@ -505,7 +512,7 @@ function getLinkBranchBlock(currentItem, alreadyMarkedFlag)
 {
 	var resultTdElement = document.createElement('td');
 	
-	if(currentItem.nextSibling)
+	if(currentItem && currentItem.nextSibling)
 	{
 		if(alreadyMarkedFlag == true)
 		{
@@ -977,6 +984,6 @@ function createXSLT()
 
 function makeXMLTrees()
 {
-	makeXMLTree('inTextArea','inDiv','in');
-	makeXMLTree('outTextArea','outDiv','out');
+	makeXMLTree('sourceXML','inDiv','in');
+	makeXMLTree('targetXML','outDiv','out');
 }
