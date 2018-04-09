@@ -2,6 +2,7 @@
 ::-webkit-scrollbar {
     width:6px;
 	height:6px;
+	cursor:pointer;
 }
 ::-webkit-scrollbar-track {
     background: white;
@@ -16,7 +17,7 @@
      width: 10px;
      border-spacing: 0px;
 }
-/*  td {
+  td {
      border-spacing: 0px;
      border:0px solid black;
      padding:0px;
@@ -28,9 +29,8 @@
  table {
      border-spacing: 0px;
      border-collapse;
-     collapse;
      border:0px solid black;
-} */
+}
  body {
      background-color: #E6E6FF;
 }
