@@ -1,72 +1,109 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Visual Mapping</title>
-		<style>
-			.branchLink td {height:10px; width: 10px; border-spacing: 0px;}
-			td {border-spacing: 0px; border:0px solid black; padding:0px;}
-			tr {border-spacing: 0px; border:0px solid red;}
-			table {border-spacing: 0px; border-collapse;collapse; border:0px solid black;}
-			body {background-color: #E6E6FF;}
-			.displayDiv {background-color:yellow;width:500px; overflow:auto; border:1px}
-			.mappNode {background-color:blue;width:10px; height:10px;readonly:readonly;cursor:default;}
-			a {text-decoration:none;color:blue;}
-			.nameSpace {text-decoration:none;color:#ac3973;}
-			.attribute {text-decoration:none;color:#33cc33;}
-			.leafNode {text-decoration:none;color:#000066;}
-			textarea {resize:none; font-family: "Arial", Helvetica, sans-serif; background-image:url(); background-repeat:no-repeat; width:99%;}
-			.indentationTable {background-color: #9966FF; cursor: pointer; height:1; color:#FFFFFF;}
-			.noselect{cursor:default; -webkit-touch-callout:none; -webkit-user-select:none; -khtml-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;}
-		</style>
+		<title>Visual Mapping Utility</title>
+		<link rel="Shortcut Icon" href="images/logo.png" type="image/x-icon"/>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<script type="application/x-javascript">
+			addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+			function hideURLbar(){ window.scrollTo(0,1); }
+		</script>
+		<link href="css/css.css" rel="stylesheet" type="text/css" media="all" />
+		<script type="text/javascript" src="js/js.js"></script>
 	</head>
+	
 	<body class="noselect" onmouseup='mouseUpFunc(event)' onmousemove='mouseMoveFunc(event)'>
-		<form width="100%" height="100%">
-			<table style="border-spacing: 0px;">
-				<tr>
-					<td><input type="button" value="Show ESQL Mapping" onClick="showESQLMapping()"/></td>
-					<td><input type="button" value="Show XSLT Mapping" onClick="createXSLT()"/></td>
-				</tr>
-			</table>
-			<table width="98%" height="100%">
-			   <tr width="100%" height="100%">
-				  <td width="48%">
-					 <table width="100%" height="100%">
-						<tr width="100%" height="10%">
-							<td>
-								<input type="button" id="inDivButton" value="Make XML Tree" onClick="makeXMLTree('inTextArea','inDiv','in');"/>&nbsp;
-							</td>
-						</tr>
-						<tr width="100%" height="90%">
-							<td width="100%">
-								<textarea id="inTextArea" rows="30" 
-								placeholder="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#9;&#9;&#9;Write Your Source XML Here..." 
-								title="Write Your Source XML Here" spellcheck="false" wrap="off"></textarea>
-								<div id="inDiv" class="displayDiv" style="display:none;"/>
-							</td>
-						</tr>
-					 </table>
-				  </td>
-				  <td width="48%">
-					 <table width="100%" height="100%">
-						<tr width="100%" height="10%">
-							<td>
-								<input type="button" id="outDivButton" value="Make XML Tree" onClick="makeXMLTree('outTextArea','outDiv','out');"/>&nbsp;
-							</td>
-						</tr>
-						<tr width="100%" height="90%">
-							<td width="100%">
-								<textarea id="outTextArea" rows="30" 
-								placeholder="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#9;&#9;&#9;Write Your Target XML Here..." 
-								title="Write Your Target XML Here" spellcheck="false" wrap="off"></textarea>
-								<div id="outDiv" class="displayDiv" style="display:none;"/>
-							</td>
-						</tr>
-					 </table>
-				  </td>
-			   </tr>
-			</table>		
-		</form>
+		
+		
+		<!--div id="input-div" class="input-div">
+			<div class="source-div">
+				<div class="xml-buttons-div">
+					<input type="button" class="xml-button" onclick="formatTextArea('inputXmlData')" value="Format XML" title="Format into Structured XML Form"/>&nbsp;
+					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea('inputXmlData')" value="Delete Comments" title="Delete All Commented Lines"/>&nbsp;
+					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea('inputXmlData')" value="Delete Empty Tags" title="Delete All Empty Fields"/>&nbsp;
+					<input type="button" class="xml-button" onclick="makeLinearXML('inputXmlData')" value="Make Linear XML" title="Make Linear XML"/>
+					<input type="button" class="xml-button" onClick="makeXMLTree('inTextArea','inDiv','in');" value="Make XML Tree" id="inDivButton"/>
+				</div>
+				<textarea id="inTextArea" title="Write Your Source XML Here" spellcheck="false" wrap="off"></textarea>
+				<div id="inDiv" class="display-tree-div"></div>
+			</div>
+			
+			<div class="target-div">
+				<div class="xml-buttons-div">
+					<input type="button" class="xml-button" onclick="formatTextArea('inputXmlData')" value="Format XML" title="Format into Structured XML Form"/>&nbsp;
+					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea('inputXmlData')" value="Delete Comments" title="Delete All Commented Lines"/>&nbsp;
+					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea('inputXmlData')" value="Delete Empty Tags" title="Delete All Empty Fields"/>&nbsp;
+					<input type="button" class="xml-button" onclick="makeLinearXML('inputXmlData')" value="Make Linear XML" title="Make Linear XML"/>
+					<input type="button" class="xml-button" onClick="makeXMLTree('outTextArea','outDiv','out');" value="Make XML Tree" id="outDivButton"/>
+				</div>
+				<textarea id="outTextArea" title="Write Your Target XML Here" spellcheck="false" wrap="off"></textarea>
+				<div id="outDiv" class="display-tree-div"></div>
+			</div>
+		</div>
+		<div class="map-button-div">
+			<input type="button" class="xml-button" value="Show ESQL Mapping" onClick="showESQLMapping()"/>
+			<input type="button" class="xml-button" value="Show XSLT Mapping" onClick="createXSLT()"/>
+		</div>
+		<div id="output-div" class="output-div">
+			
+		</div-->
+		
+		
+		
+		
+		
+		<!--**********************************************************-->
+		<!--**********************************************************-->
+		<table style="width:98%; height:95%;margin:auto;">
+			<tr style="width:100%;height:10%;">
+				<td style="width:40%;height:100%;text-align:left;">
+					<input type="button" class="xml-button" onclick="formatTextArea('inputXmlData')" value="Format XML" title="Format into Structured XML Form"/>
+					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea('inputXmlData')" value="Delete Comments" title="Delete All Commented Lines"/>
+					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea('inputXmlData')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
+					<input type="button" class="xml-button" onclick="makeLinearXML('inputXmlData')" value="Make Linear XML" title="Make Linear XML"/>
+				</td>
+				<td colspan="2" style="width:20%;height:100%;text-align:center;">
+					<input type="button" class="xml-button" onClick="makeXMLTrees();" value="Make XML Tree" id="inDivButton"/>
+				</td>
+				<td style="width:40%;height:100%;text-align:right;">
+					<input type="button" class="xml-button" onclick="formatTextArea('inputXmlData')" value="Format XML" title="Format into Structured XML Form"/>
+					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea('inputXmlData')" value="Delete Comments" title="Delete All Commented Lines"/>
+					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea('inputXmlData')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
+					<input type="button" class="xml-button" onclick="makeLinearXML('inputXmlData')" value="Make Linear XML" title="Make Linear XML"/>
+				</td>
+			</tr>
+			
+			<tr style="width:100%;height:80%;">
+				<td colspan="2">
+					<textarea id="inTextArea" rows="30" 
+					placeholder="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#9;&#9;&#9;Write Your Source XML Here..." 
+					title="Write Your Source XML Here" spellcheck="false" wrap="off"></textarea>
+					
+				</td>
+				<td colspan="2">
+					<textarea id="outTextArea" rows="30" 
+					placeholder="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#9;&#9;&#9;Write Your Target XML Here..." 
+					title="Write Your Target XML Here" spellcheck="false" wrap="off"></textarea>
+					
+				</td>
+			</tr>
+			
+			<tr style="width:100%;height:10%;">
+				<td colspan="4">
+					<input type="button" value="Show ESQL Mapping" onClick="showESQLMapping()"/>
+					<input type="button" value="Show XSLT Mapping" onClick="createXSLT()"/>
+				</td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><div id="inDiv" class="displayDiv"/></td>
+				<td><div id="outDiv" class="displayDiv"/></td>
+			</tr>
+		</table>
 		<p id="pdhurr"><div id="iii" style="width:200px; border: 1px solid black; text-align:center;">Bibek</div></p>
-		<script src="tempJS.js"></script>
 	</body>
 </html>
