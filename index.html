@@ -12,28 +12,31 @@
 			function hideURLbar(){ window.scrollTo(0,1); }
 		</script>
 		<link href="css/css.css" rel="stylesheet" type="text/css" media="all" />
-		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/mapping_logic.js"></script>
+		<script type="text/javascript" src="js/xml_functions.js"></script>
+		<script type="text/javascript" src="js/old_xml_functions.js"></script>
+		<script type="text/javascript" src="js/visual_tree_logic.js"></script>
+		<script type="text/javascript" src="js/line_functions.js"></script>
 	</head>
 	
 	<body class="noselect" onmouseup='mouseUpFunc(event)' onmousemove='mouseMoveFunc(event)'>
-		
-		
+
 		<table style="width:98%; height:95%;margin:auto;">
 			<tr style="width:100%;height:10%;">
 				<td style="width:40%;height:100%;text-align:left;">
-					<input type="button" class="xml-button" onclick="formatTextArea('sourceXML')" value="Format XML" title="Format into Structured XML Form"/>
-					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea('sourceXML')" value="Delete Comments" title="Delete All Commented Lines"/>
-					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea('sourceXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
-					<input type="button" class="xml-button" onclick="makeLinearXML('sourceXML')" value="Make Linear XML" title="Make Linear XML"/>
+					<input type="button" class="xml-button" onclick="formatTextArea_old('sourceXML')" value="Format XML" title="Format into Structured XML Form"/>
+					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea_old('sourceXML')" value="Delete Comments" title="Delete All Commented Lines"/>
+					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea_old('sourceXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
+					<input type="button" class="xml-button" onclick="makeLinearXML_old('sourceXML')" value="Make Linear XML" title="Make Linear XML"/>
 				</td>
 				<td colspan="2" style="width:20%;height:100%;text-align:center;">
 					<input type="button" class="xml-button" onClick="makeXMLTrees();" value="Make XML Tree" id="inDivButton"/>
 				</td>
 				<td style="width:40%;height:100%;text-align:right;">
-					<input type="button" class="xml-button" onclick="formatTextArea('targetXML')" value="Format XML" title="Format into Structured XML Form"/>
-					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea('targetXML')" value="Delete Comments" title="Delete All Commented Lines"/>
-					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea('targetXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
-					<input type="button" class="xml-button" onclick="makeLinearXML('targetXML')" value="Make Linear XML" title="Make Linear XML"/>
+					<input type="button" class="xml-button" onclick="formatTextArea_old('targetXML')" value="Format XML" title="Format into Structured XML Form"/>
+					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea_old('targetXML')" value="Delete Comments" title="Delete All Commented Lines"/>
+					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea_old('targetXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
+					<input type="button" class="xml-button" onclick="makeLinearXML_old('targetXML')" value="Make Linear XML" title="Make Linear XML"/>
 				</td>
 			</tr>
 			
@@ -59,12 +62,12 @@
 			
 		</table>
 		
-		<table style="width:98%; margin:auto;">
+		<table style="width:98%;">
 			<tr style="width:100%;">
-				<td style="width:50%;">
+				<td style="width:50%; vertical-align:top;">
 					<div id="inDiv" class="displayDiv"/>
 				</td>
-				<td style="width:50%;">
+				<td style="width:50%; vertical-align:top;">
 					<div id="outDiv" class="displayDiv"/>
 				</td>
 			</tr>
@@ -75,9 +78,11 @@
 				<td style="width:50%">
 					<input type="button" value="Show ESQL Mapping" onClick="showESQLMapping()"/>
 					<!--input type="button" value="Show XSLT Mapping" onClick="createXSLT()"/-->
+					<input type="button" value="Show Raw Mapping" onClick="showRawMapping()"/>
 				</td>
 			</tr>
 		</table>
+
 		<p id="pdhurr"><div id="iii" style="width:200px; border: 1px solid black; text-align:center;"></div></p>
 	</body>
 </html>
