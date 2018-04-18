@@ -5,6 +5,7 @@ var mappingSource, mappingTargetId, mappingSourceX, mappingSourceY, cPath = "";
 var alreadyMarkedFlagsArray = [];
 var mappingArray = [];
 var inNameSpaceMap = new Object();
+var outNameSpaceMap = new Object();
 var finalNameSpaceMap = new Object();
 var inputXMLDoc, outputXMLDoc;
 
@@ -12,8 +13,18 @@ var inputXMLDoc, outputXMLDoc;
 
 function makeXMLTrees()
 {
+	document.getElementById("loading-screen").style.display = "block";
 	makeXMLTree('sourceXML','inDiv','in');
 	makeXMLTree('targetXML','outDiv','out');
+	document.getElementById("loading-screen").style.display = "none";
+}
+
+function showRawXMLs()
+{
+	document.getElementById("loading-screen").style.display = "block";
+	showRawXML('sourceXML','inDiv','in');
+	showRawXML('targetXML','outDiv','out');
+	document.getElementById("loading-screen").style.display = "none";
 }
 
 function generalizeNSName(currentItem)
@@ -59,24 +70,100 @@ function ascendingSort(mappingArray)
     }
 }
 
-function showRawMapping()
+function addNameSpace(attributeObject, cType)
 {
-	document.getElementById('pdhurr').innerHTML = '';
-	ascendingSort(mappingArray);
-	var inHTML = '<table>';
-	for(var i=0; i< mappingArray.length; i++)
+	var result = false;
+	if(cType.toUpperCase() == 'IN')
 	{
-		inHTML = inHTML + '<tr><td style="border:1px solid red;">' + mappingArray[i][0] + '</td><td style="border:1px solid red;">' + mappingArray[i][1] + '</td><td style="border:1px solid red;">' + mappingArray[i][2] + '</td></tr>';
+		inNameSpaceMap[attributeObject.name.substring(6)] = attributeObject.value;
+		var nsFound = false;
+		for(var key in finalNameSpaceMap)
+		{
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == ''))
+			{
+				nsFound = true;
+				finalNameSpaceMap[key] = attributeObject.value;
+				break;
+			}
+			
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == attributeObject.value))
+			{
+				nsFound = true;
+				break;
+			}
+		}
+		if(nsFound == false)
+		{
+			result = 'NS'+(Object.keys(finalNameSpaceMap).length);
+			finalNameSpaceMap[result] = attributeObject.value;
+		}
 	}
-	document.getElementById('pdhurr').innerHTML = inHTML + '</table>';
+	
+	if(cType.toUpperCase() == 'OUT')
+	{
+		outNameSpaceMap[attributeObject.name.substring(6)] = attributeObject.value;
+		var nsFound = false;
+		for(var key in finalNameSpaceMap)
+		{
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == ''))
+			{
+				nsFound = true;
+				finalNameSpaceMap[key] = attributeObject.value;
+				break;
+			}
+			
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == attributeObject.value))
+			{
+				nsFound = true;
+				break;
+			}
+		}
+		if(nsFound == false)
+		{
+			result = 'NS'+(Object.keys(finalNameSpaceMap).length);
+			finalNameSpaceMap[result] = attributeObject.value;
+		}
+	}
+	return result;
 }
 
+/* **************************************************
+******** Showing the Raw Mapping Table **************
+************************************************** */
+function showRawMapping()
+{
+	ascendingSort(mappingArray);
+	var inHTML = '<table style="border:1px solid red;">';
+	for(var i=0; i< mappingArray.length; i++)
+	{
+		inHTML = inHTML + '<tr><td>' + mappingArray[i][0] + '</td><td>' + mappingArray[i][1] + '</td><td>' + mappingArray[i][2] + '</td></tr>';
+	}
+	inHTML = inHTML + '</table>';
+	
+	var rawMapWindow = window.open('', 'rawMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
+    rawMapWindow.document.write(inHTML);
+}
+
+/* **************************************************
+*********** Showing the ESQL Code *******************
+************************************************** */
 function showESQLMapping()
 {
 	var sourcePath, targetPath;
-	document.getElementById('pdhurr').innerHTML = '';
 	ascendingSort(mappingArray);
+	
 	var esqlHTML = '';
+	
+	for(var key in finalNameSpaceMap)
+	{
+		if(finalNameSpaceMap.hasOwnProperty(key))
+		{
+			esqlHTML += 'DECLARE ' + key + ' NAMESPACE "' + finalNameSpaceMap[key] + '";\n';
+		}
+	}
+	
+	esqlHTML += '\n';
+	
 	for(var i=0; i< mappingArray.length; i++)
 	{
 		sourcePath = document.getElementById(mappingArray[i][0]).className.replace(/\//g,'.').replace(/\[/g,'(XMLNSC.Attribute)').replace(/\]/g,'');
@@ -85,72 +172,124 @@ function showESQLMapping()
 		esqlHTML = esqlHTML + 'SET OutputRoot.XMLNSC'+ targetPath + ' = InputRoot.XMLNSC' + sourcePath + ';\n';
 	}
 	var ESQLMapWindow = window.open('', 'ESQLMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
-    ESQLMapWindow.document.write('<p align="center"><textarea rows="25" cols="100" spellcheck="false" wrap="off" >'+esqlHTML+'</textarea></p>');
+    ESQLMapWindow.document.write('<p align="center"><textarea rows="25" cols="100" spellcheck="false" wrap="off" >' + esqlHTML + '</textarea></p>');
 }
 
+/* **************************************************
+*********** Showing the XSLT Code *******************
+************************************************** */
 function createXSLT()
 {
 	ascendingSort(mappingArray);
-	var xslString = '';
-	xslString += '<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"';
+	
+	var xslNS = "http://www.w3.org/1999/XSL/Transform";
+	var excludeNS = "xsl xsi";
+	
+	var styleSheetNode = document.createElementNS(xslNS,"xsl:stylesheet");
+	styleSheetNode.setAttribute("version", "1.0");
+	styleSheetNode.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+	
 	for(var key in finalNameSpaceMap)
 	{
 		if(finalNameSpaceMap.hasOwnProperty(key))
 		{
-			xslString += ' xmlns:'+key+'="'+finalNameSpaceMap[key]+'"';
+			styleSheetNode.setAttribute("xmlns:" + key, finalNameSpaceMap[key]);
+			excludeNS += " " + key;
 		}
 	}
 	
-	xslString += '><xsl:output method="xml" omit-xml-declaration="yes"/>';
-	xslString += '<xsl:template match="/">';
+	styleSheetNode.setAttribute("exclude-result-prefixes", excludeNS);
+	
+	var outputNode = document.createElementNS(xslNS,"xsl:output");
+	outputNode.setAttribute("method", "xml");
+	outputNode.setAttribute("omit-xml-declaration", "yes");
+	
+	styleSheetNode.appendChild(outputNode);
 	
 	//************** XSLT Writing Logic *****************
+	var templateNode = document.createElementNS(xslNS,"xsl:template");
+	templateNode.setAttribute("match", "/");
+	
 	for(var i=0; i< mappingArray.length; i++)
 	{
 		targetElements = document.getElementById(mappingArray[i][1]).className.substring(1).split('/');
-		var tempNode = outputXMLDoc;
-		//var attrFlag = false;
+		var tempNode = templateNode;
+		var objectType = "Element";
+		
 		for(var j=0; j<targetElements.length; j++)
 		{
-			if(targetElements[j].charAt(0) == '[')
-			{
-				var ns = targetElements[j-1].substring(0,targetElements[j-1].indexOf(':'));
-				var tagName = targetElements[j-1].substring(targetElements[j-1].indexOf(':')+1);
-				
-				//tempNode = 	tempNode.getElementsByTagName(tagName)[0];
-				//attrFlag = true;
-				//tempNode.attributes = null;
-				while(tempNode.attributes.length > 0)
-				{
-					tempNode.removeAttribute(tempNode.attributes[0].name);
-				}
+			if(targetElements[j].charAt(0) == '['){objectType = "Attribute";}
 			
-				var attr = document.createElement("xsl:attribute");
-				attr.setAttribute("name", targetElements[j].substring(1,targetElements[j].length-1));
-				if(ns.length >0){attr.setAttribute("namespace", ns);}
-				tempNode.appendChild(attr);
-				tempNode = attr;
-				//tempNode = 	tempNode.getAttribute(targetElements[j].replace(/[\[\]]/g,''));
+			var ns = "";
+			var element = "";
+			var nsKey = "";
+			var nsVal = "";
+			if(objectType == "Attribute")
+			{
+				if (targetElements[j].indexOf(':') > 0)
+				{
+					ns = targetElements[j].substring(1,targetElements[j].indexOf(':'));
+					element = targetElements[j].substring(targetElements[j].indexOf(':')+1,targetElements[j].length-1);
+				}
+				else
+				{
+					element = targetElements[j].substring(1,targetElements[j].length-1);
+				}
 			}
 			else
 			{
-				var ns = targetElements[j].substring(0,targetElements[j].indexOf(':'));
-				var tagName = targetElements[j].substring(targetElements[j].indexOf(':')+1);
-				
-				tempNode = 	tempNode.getElementsByTagName(tagName)[0];
+				ns = targetElements[j].substring(0,targetElements[j].indexOf(':'));
+				element = targetElements[j].substring(targetElements[j].indexOf(':')+1);
 			}
+			
+			if (ns != "")
+			{
+				nsVal = finalNameSpaceMap[ns];
+				
+				for (nsKey in outNameSpaceMap)
+				{
+					if (outNameSpaceMap[nsKey] == nsVal){break;}
+				}
+				element = nsKey + ":" + element;
+			}
+			
+			if (! templateNode.getElementsByTagName(element)[0])
+			{
+				var nodeElement;
+				if(objectType == "Attribute")
+				{
+					//var attName = targetElements[j].substring(1, targetElements[j].length - 1);
+					nodeElement = document.createElementNS(xslNS,"xsl:attribute");
+
+					nodeElement.setAttribute("name",element);
+					
+					if (ns != "")
+					{
+						nodeElement.setAttribute("xmlns:"+nsKey,nsVal);
+					}
+				}
+				else
+				{
+					nodeElement = document.createElementNS(nsVal,element);
+				}
+				tempNode.appendChild(nodeElement);
+				tempNode = nodeElement;
+			}
+			else
+			{
+				tempNode = tempNode.getElementsByTagName(element)[0];
+			}
+			
 		}
+		var valElement = document.createElementNS(xslNS,"xsl:value-of");
+		valElement.setAttribute("select", document.getElementById(mappingArray[i][0]).className.replace(/[\[]/g,'@').replace(/[\]]/g,''));
 		
-		var sourceLink = document.createTextNode('<xsl:value-of select="' + document.getElementById(mappingArray[i][0]).className.replace(/[\[]/g,'@').replace(/[\]]/g,'') + '"/>');
-		tempNode.textContent = null;
-		tempNode.appendChild(sourceLink);
+		tempNode.appendChild(valElement);
 	}
+	styleSheetNode.appendChild(templateNode);
 	
-	xslString += new XMLSerializer().serializeToString(outputXMLDoc.documentElement);
-	
-	xslString += '</xsl:template></xsl:stylesheet>';
-	//alert(xslString);	formatXml(xslString)
+	var xslString = new XMLSerializer().serializeToString(styleSheetNode);
 	
 	var xslMapWindow = window.open('', 'xslMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
-    xslMapWindow.document.write('<p align="center"><textarea rows="25" cols="100" spellcheck="false" wrap="off" >'+formatXml(xslString)+'</textarea></p>');
+	xslMapWindow.document.write('<p align="center"><textarea rows="25" cols="100" spellcheck="false" wrap="off" >'+formatXml(formatXml(xslString))+'</textarea></p>');
 }

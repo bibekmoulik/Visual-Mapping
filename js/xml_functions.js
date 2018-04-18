@@ -144,34 +144,3 @@ function deleteTextNodes(item)
 	}
 	return item ;
 }
-
-function addNameSpace(attributeObject, cType)
-{
-	var result = false;
-	if(cType.toUpperCase() == 'IN')
-	{
-		inNameSpaceMap[attributeObject.name.substring(6)] = attributeObject.value;
-		var nsFound = false;
-		for(var key in finalNameSpaceMap)
-		{
-			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == ''))
-			{
-				nsFound = true;
-				finalNameSpaceMap[key] = attributeObject.value;
-				break;
-			}
-			
-			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == attributeObject.value))
-			{
-				nsFound = true;
-				break;
-			}
-		}
-		if(nsFound == false)
-		{
-			result = 'NS'+(Object.keys(finalNameSpaceMap).length);
-			finalNameSpaceMap[result] = attributeObject.value;
-		}
-	}
-	return result;
-}

@@ -12,12 +12,11 @@ function makeXMLTree(inElementId,outElementId,cType)
 		inElement.style.display = 'none';
 		outElement.style.display = 'block';
 		
-		var buttonElement = document.getElementById(outElementId + "Button");
+		var buttonElement = document.getElementById("changeButton");
 		if(buttonElement)
 		{
 			buttonElement.value = "Show Raw XML" ;
-			buttonElement.onclick = function() {showRawXML('sourceXML','inDiv','in');showRawXML('targetXML','outDiv','out');}
-			//buttonElement.onclick = function() {showRawXML(inElementId,outElementId,cType);}
+			buttonElement.onclick = function() {showRawXMLs();}
 		}
 		idCounter = 0 ;
 	}
@@ -28,12 +27,11 @@ function showRawXML(inElementId,outElementId,cType)
 	var inElement	= document.getElementById(inElementId);
 	var outElement	= document.getElementById(outElementId);
 	
-	var buttonElement = document.getElementById(outElementId + "Button");
+	var buttonElement = document.getElementById("changeButton");
 	if(buttonElement)
 	{
 		buttonElement.value = "Make XML Tree" ;
-		//buttonElement.onclick = function() {makeXMLTree(inElementId,outElementId,cType);}
-		buttonElement.onclick = function() {makeXMLTree('sourceXML','inDiv','in');makeXMLTree('targetXML','outDiv','out');}
+		buttonElement.onclick = function() {makeXMLTrees();}
 	}
 	
 	outElement.style.display = 'none';
@@ -136,7 +134,7 @@ function funcIterate(item, cType, cPath)
 		if(attributeList.length > 0)
 		{
 			var attributeRow = document.createElement('tr');
-			attributeRow.id = cType + '_attribute_row_id_' + idCounter;
+			attributeRow.id = cType + '#_attribute_row_id_' + idCounter;
 			
 			var attributeTd = document.createElement('td');
 			var attributeTable = getAttributesTable(currentItem,attributeList,cType,cPath);
@@ -196,8 +194,8 @@ function getAttributesTable(currentItem, attributeList, cType, cLocalPath)
 			attributeValueRow.appendChild(getLinkBlock(4));
 		}
 		attributeValueRow.appendChild(getAttributeLinkBranchBlock(attributeList,i));
-		var cAttributePath = cLocalPath + "/[" + attributeList[i].localName + "]" ;
-		var cAttributeId = idCounter + "._attribute_" + (i+1) ;
+		var cAttributePath = cLocalPath + "/[" + generalizeNSName(attributeList[i]) + "]" ;
+		var cAttributeId = idCounter + ".#_attribute_" + (i+1) ;
 		if(cType.toUpperCase() == 'IN')
 		{
 			attributeValueRow.appendChild(getAttributesNameValueVisual(attributeList[i],cType));
@@ -269,7 +267,7 @@ function toggleVisibility(idCounter,cType)
 {
 	var isFirstTag = true ;
 	var fertileRowElement = document.getElementById(cType+'_fertile_row_id_'+idCounter);
-	var attributeRowElement = document.getElementById(cType+'_attribute_row_id_'+idCounter);
+	var attributeRowElement = document.getElementById(cType+'#_attribute_row_id_'+idCounter);
 	
 	var collapsibleBlock  = document.getElementById(cType+'_collapsible_block_id_'+idCounter);
 	

@@ -17,11 +17,34 @@
 		<script type="text/javascript" src="js/old_xml_functions.js"></script>
 		<script type="text/javascript" src="js/visual_tree_logic.js"></script>
 		<script type="text/javascript" src="js/line_functions.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				$(document).ajaxStart(function(){
+					$("#loading-screen").css("display", "block");
+				});
+				$(document).ajaxComplete(function(){
+					$("#loading-screen").css("display", "none");
+				});
+			});
+		</script>
 	</head>
 	
 	<body class="noselect" onmouseup='mouseUpFunc(event)' onmousemove='mouseMoveFunc(event)'>
 
-		<table style="width:98%; height:95%;margin:auto;">
+		<!--**************************************************-->
+		<!--***************** Raw XML table ******************-->
+		<!--**************************************************-->
+		<table style="width:98%; height:95%; margin:auto;">
+			
+			<tr style="width:100%;height:80%;">
+				<td colspan="1" style="text-align:left;"><h3>Source XML</h3></td>
+				<td colspan="2" rowspan="2" style="width:20%;height:100%;text-align:center;vertical-align:middle;">
+					<input id="changeButton" type="button" class="xml-button" onClick="makeXMLTrees();" value="Make XML Tree"/>
+				</td>
+				<td colspan="1" style="text-align:right;"><h3>Target XML</h3></td>
+			</tr>
+			
 			<tr style="width:100%;height:10%;">
 				<td style="width:40%;height:100%;text-align:left;">
 					<input type="button" class="xml-button" onclick="formatTextArea_old('sourceXML')" value="Format XML" title="Format into Structured XML Form"/>
@@ -29,9 +52,7 @@
 					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea_old('sourceXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
 					<input type="button" class="xml-button" onclick="makeLinearXML_old('sourceXML')" value="Make Linear XML" title="Make Linear XML"/>
 				</td>
-				<td colspan="2" style="width:20%;height:100%;text-align:center;">
-					<input type="button" class="xml-button" onClick="makeXMLTrees();" value="Make XML Tree" id="inDivButton"/>
-				</td>
+				
 				<td style="width:40%;height:100%;text-align:right;">
 					<input type="button" class="xml-button" onclick="formatTextArea_old('targetXML')" value="Format XML" title="Format into Structured XML Form"/>
 					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea_old('targetXML')" value="Delete Comments" title="Delete All Commented Lines"/>
@@ -41,27 +62,25 @@
 			</tr>
 			
 			<tr style="width:100%;height:80%;">
-				<td colspan="2"><b><u>Source XML</u></b></td>
-				<td colspan="2"><b><u>Target XML</u></b></td>
-			</tr>
-			
-			<tr style="width:100%;height:80%;">
 				<td colspan="2">
+					<br/>
 					<textarea id="sourceXML" rows="30" 
 					placeholder="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#9;&#9;&#9;Write Your Source XML Here..." 
 					title="Write Your Source XML Here" spellcheck="false" wrap="off"></textarea>
-					
 				</td>
 				<td colspan="2">
+					<br/>
 					<textarea id="targetXML" rows="30" 
 					placeholder="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#9;&#9;&#9;Write Your Target XML Here..." 
 					title="Write Your Target XML Here" spellcheck="false" wrap="off"></textarea>
-					
 				</td>
 			</tr>
 			
 		</table>
 		
+		<!--**************************************************-->
+		<!--**************** XML Tree table ******************-->
+		<!--**************************************************-->
 		<table style="width:98%;">
 			<tr style="width:100%;">
 				<td style="width:50%; vertical-align:top;">
@@ -73,16 +92,29 @@
 			</tr>
 		</table>
 		
+		<!--**************************************************-->
+		<!--************ Code Generator Buttons **************-->
+		<!--**************************************************-->
 		<table style="width:98%; margin:auto;">
 			<tr style="width:100%;">
 				<td style="width:50%">
-					<input type="button" value="Show ESQL Mapping" onClick="showESQLMapping()"/>
-					<!--input type="button" value="Show XSLT Mapping" onClick="createXSLT()"/-->
-					<input type="button" value="Show Raw Mapping" onClick="showRawMapping()"/>
+					<br/>
+					<br/>
+					<input type="button" class="xml-button" value="Show Raw Mapping" onClick="showRawMapping()"/>
+					<input type="button" class="xml-button" value="Show ESQL Mapping" onClick="showESQLMapping()"/>
+					<input type="button" class="xml-button" value="Show XSLT Mapping" onClick="createXSLT()"/>
 				</td>
 			</tr>
 		</table>
-
-		<p id="pdhurr"><div id="iii" style="width:200px; border: 1px solid black; text-align:center;"></div></p>
+		
+		<!--**************************************************-->
+		<!--***************** Waiting Logo *******************-->
+		<!--**************************************************-->
+		<!--p id="pdhurr"><div id="iii" style="width:200px; border: 1px solid black; text-align:center;"></div></p-->
+		<div id="loading-screen" class="loading-screen">
+			<img src="images/logo.png"></img>
+		</div>
+		
+		
 	</body>
 </html>
