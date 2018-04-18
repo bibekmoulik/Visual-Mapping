@@ -1,27 +1,4 @@
 
-function makeXMLTree(inElementId,outElementId,cType)
-{
-	var inElement	= document.getElementById(inElementId);
-	var outElement	= document.getElementById(outElementId);
-					
-	var rawXmlData = inElement.value ;
-	outElement.innerHTML = '';
-	
-	if(createXMLTree(rawXmlData,outElement,cType))
-	{	
-		inElement.style.display = 'none';
-		outElement.style.display = 'block';
-		
-		var buttonElement = document.getElementById("changeButton");
-		if(buttonElement)
-		{
-			buttonElement.value = "Show Raw XML" ;
-			buttonElement.onclick = function() {showRawXMLs();}
-		}
-		idCounter = 0 ;
-	}
-}
-
 function showRawXML(inElementId,outElementId,cType)
 {
 	var inElement	= document.getElementById(inElementId);
@@ -54,18 +31,18 @@ function showRawXML(inElementId,outElementId,cType)
 	outElement.innerHTML = '';
 }
 
-function createXMLTree(rawXmlData, OutElement, cType) 
+function createXMLTree(rawXmlData, OutElement, cType, stringType) 
 {
 	var result = true ;
 	var outputXml = "" ;
 	var indentCount = -1 ;
 	
 	var cleanedRawData = rawXmlData.replace(/>\s*</g,"><").replace(/\n/g,"");
-	var xmlDoc = xmlParsing(cleanedRawData);
+	var xmlDoc = xmlParsing(cleanedRawData,stringType);
 	
 	var withoutComments = deleteComments_old(xmlDoc, outputXml, indentCount).substring(1);
 	cleanedRawData = withoutComments.replace(/>\s*</g,"><").replace(/\n/g,"");
-	xmlDoc = xmlParsing(cleanedRawData);
+	xmlDoc = xmlParsing(cleanedRawData,stringType);
 	
 	xmlDoc = deleteTextNodes(xmlDoc);
 	
@@ -248,18 +225,18 @@ function getAttributesNameValueVisual(attributeObject,cType)
 	return resultTdElement;
 }
 			
-function extractDOMErrorText(errorText)
+function extractDOMErrorText(errorText,stringType)
 {
 	var tempText = errorText.substring(errorText.indexOf(":")+1);
 	var mainErrorBody = tempText.substring(0, tempText.indexOf("\n"));
 	var positionText = mainErrorBody.substring(0, mainErrorBody.indexOf(":"));
 	var reasonText = mainErrorBody.substring(mainErrorBody.indexOf(":")+1);
 	var alertText = "";
-	alertText = alertText + "-------------------------------------------\n";
-	alertText = alertText + "Error Occurred While Parsing XML :\n";
-	alertText = alertText + "-------------------------------------------\n";
-	alertText = alertText + "Error Position :  " + positionText + "\n";
-	alertText = alertText + "Error Reason  : " + reasonText;
+	alertText += "-------------------------------------------\n";
+	alertText += "Error Occurred While Parsing " + stringType + " :\n";
+	alertText += "-------------------------------------------\n";
+	alertText += "Error Position :  " + positionText + "\n";
+	alertText += "Error Reason  : " + reasonText;
 	alert(alertText);
 }
 

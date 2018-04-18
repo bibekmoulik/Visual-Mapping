@@ -1,5 +1,5 @@
 
-function xmlParsing(xmlString)
+function xmlParsing(xmlString, stringType)
 {
 	var xmlDoc;
 	if (window.DOMParser)
@@ -9,7 +9,7 @@ function xmlParsing(xmlString)
 		//alert(xmlDoc.parseError.reason);
 		if(xmlDoc.getElementsByTagName("parsererror").length > 0 )
 		{
-			extractDOMErrorText(xmlDoc.getElementsByTagName("parsererror")[0].innerText);
+			extractDOMErrorText(xmlDoc.getElementsByTagName("parsererror")[0].innerText,stringType);
 			xmlDoc = false ;
 		}
 	}
@@ -20,7 +20,7 @@ function xmlParsing(xmlString)
 		xmlDoc.loadXML(xmlString);
 		if(xmlDoc.parseError.errorCode != 0 )
 		{
-			alert("Invalid XML : "+xmlDoc.parseError.reason+"\nLineNumber : "
+			alert("Invalid " + stringType + " : " + xmlDoc.parseError.reason + "\nLineNumber : "
 			+xmlDoc.parseError.line+"\nPosition : "+xmlDoc.parseError.linepos);
 			xmlDoc = false ;
 		}
@@ -28,12 +28,12 @@ function xmlParsing(xmlString)
 	return xmlDoc;
 }
 
-function formatXml(rawXmlData) 
+function formatXml(rawXmlData,stringType) 
 {
 	var formattedXmlData = "" ;
 	var indentCount = -1 ;				
 	var cleanedRawData = rawXmlData.replace(/>\s*</g,"><").replace(/\n/g,"");
-	xmlDoc = xmlParsing(cleanedRawData);
+	xmlDoc = xmlParsing(cleanedRawData,stringType);
 	formattedXmlData = funcFormatIterate(xmlDoc, formattedXmlData, indentCount).substring(1);
 	return formattedXmlData ;
 }

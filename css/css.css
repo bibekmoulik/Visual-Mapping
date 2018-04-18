@@ -173,8 +173,12 @@
 	vertical-align:middle;
 } */
 
-.xml-button{
+.xml-button, .map-button, .change-button{
 	cursor: pointer;
+}
+
+.map-button{
+	visibility:hidden;
 }
 
 .loading-screen{
