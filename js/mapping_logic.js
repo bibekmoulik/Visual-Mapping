@@ -27,32 +27,35 @@ function makeXMLTrees()
 	var rawTargetXmlData = inTargetElement.value ;
 	outTargetElement.innerHTML = '';
 	
-	if(createXMLTree(rawSourceXmlData,outSourceElement,cSourceType,'Source XML') && createXMLTree(rawTargetXmlData,outTargetElement,cTargetType,'Target XML'))
-	{	
-		inSourceElement.style.display = 'none';
-		outSourceElement.style.display = 'block';
-		
-		inTargetElement.style.display = 'none';
-		outTargetElement.style.display = 'block';
-		
-		var buttonElement = document.getElementById("changeButton");
-		if(buttonElement)
-		{
-			buttonElement.value = "Show Raw XML" ;
-			buttonElement.onclick = function() {showRawXMLs();}
-		}
-		idCounter = 0 ;
-		
-		var mapButtons = document.getElementsByClassName("map-button");
-		for(var i=0; i<mapButtons.length; i++)
-		{
-			mapButtons[i].style.visibility = "visible";
-		}
-		
-		var xmlButtons = document.getElementsByClassName("xml-button");
-		for(var i=0; i<xmlButtons.length; i++)
-		{
-			xmlButtons[i].disabled = true;
+	if (xmlParsing_old(rawSourceXmlData,'Source XML') && xmlParsing_old(rawTargetXmlData,'Target XML'))
+	{
+		if(createXMLTree(rawSourceXmlData,outSourceElement,cSourceType) && createXMLTree(rawTargetXmlData,outTargetElement,cTargetType))
+		{	
+			inSourceElement.style.display = 'none';
+			outSourceElement.style.display = 'block';
+			
+			inTargetElement.style.display = 'none';
+			outTargetElement.style.display = 'block';
+			
+			var buttonElement = document.getElementById("changeButton");
+			if(buttonElement)
+			{
+				buttonElement.value = "Show Raw XML" ;
+				buttonElement.onclick = function() {showRawXMLs();}
+			}
+			idCounter = 0 ;
+			
+			var mapButtons = document.getElementsByClassName("map-button");
+			for(var i=0; i<mapButtons.length; i++)
+			{
+				mapButtons[i].style.visibility = "visible";
+			}
+			
+			var xmlButtons = document.getElementsByClassName("xml-button");
+			for(var i=0; i<xmlButtons.length; i++)
+			{
+				xmlButtons[i].disabled = true;
+			}
 		}
 	}
 }

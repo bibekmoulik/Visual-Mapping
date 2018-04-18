@@ -1,5 +1,5 @@
 
-function xmlParsing(xmlString, stringType)
+function xmlParsing(xmlString)
 {
 	var xmlDoc;
 	if (window.DOMParser)
@@ -7,33 +7,33 @@ function xmlParsing(xmlString, stringType)
 		parser = new DOMParser();
 		xmlDoc = parser.parseFromString(xmlString ,"text/xml");
 		//alert(xmlDoc.parseError.reason);
-		if(xmlDoc.getElementsByTagName("parsererror").length > 0 )
-		{
-			extractDOMErrorText(xmlDoc.getElementsByTagName("parsererror")[0].innerText,stringType);
-			xmlDoc = false ;
-		}
+		//if(xmlDoc.getElementsByTagName("parsererror").length > 0 )
+		//{
+		//	extractDOMErrorText(xmlDoc.getElementsByTagName("parsererror")[0].innerText);
+		//	xmlDoc = false ;
+		//}
 	}
 	else
 	{
 		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
 		xmlDoc.async = false;
 		xmlDoc.loadXML(xmlString);
-		if(xmlDoc.parseError.errorCode != 0 )
-		{
-			alert("Invalid " + stringType + " : " + xmlDoc.parseError.reason + "\nLineNumber : "
-			+xmlDoc.parseError.line+"\nPosition : "+xmlDoc.parseError.linepos);
-			xmlDoc = false ;
-		}
+		//if(xmlDoc.parseError.errorCode != 0 )
+		//{
+		//	alert("Invalid XML : " + xmlDoc.parseError.reason + "\nLineNumber : "
+		//	+xmlDoc.parseError.line+"\nPosition : "+xmlDoc.parseError.linepos);
+		//	xmlDoc = false ;
+		//}
 	}
 	return xmlDoc;
 }
 
-function formatXml(rawXmlData,stringType) 
+function formatXml(rawXmlData) 
 {
 	var formattedXmlData = "" ;
 	var indentCount = -1 ;				
 	var cleanedRawData = rawXmlData.replace(/>\s*</g,"><").replace(/\n/g,"");
-	xmlDoc = xmlParsing(cleanedRawData,stringType);
+	xmlDoc = xmlParsing(cleanedRawData);
 	formattedXmlData = funcFormatIterate(xmlDoc, formattedXmlData, indentCount).substring(1);
 	return formattedXmlData ;
 }

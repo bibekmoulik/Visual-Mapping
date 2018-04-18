@@ -31,18 +31,18 @@ function showRawXML(inElementId,outElementId,cType)
 	outElement.innerHTML = '';
 }
 
-function createXMLTree(rawXmlData, OutElement, cType, stringType) 
+function createXMLTree(rawXmlData, OutElement, cType) 
 {
 	var result = true ;
 	var outputXml = "" ;
 	var indentCount = -1 ;
 	
 	var cleanedRawData = rawXmlData.replace(/>\s*</g,"><").replace(/\n/g,"");
-	var xmlDoc = xmlParsing(cleanedRawData,stringType);
+	var xmlDoc = xmlParsing(cleanedRawData);
 	
 	var withoutComments = deleteComments_old(xmlDoc, outputXml, indentCount).substring(1);
 	cleanedRawData = withoutComments.replace(/>\s*</g,"><").replace(/\n/g,"");
-	xmlDoc = xmlParsing(cleanedRawData,stringType);
+	xmlDoc = xmlParsing(cleanedRawData);
 	
 	xmlDoc = deleteTextNodes(xmlDoc);
 	
@@ -225,7 +225,7 @@ function getAttributesNameValueVisual(attributeObject,cType)
 	return resultTdElement;
 }
 			
-function extractDOMErrorText(errorText,stringType)
+function extractDOMErrorText(errorText)
 {
 	var tempText = errorText.substring(errorText.indexOf(":")+1);
 	var mainErrorBody = tempText.substring(0, tempText.indexOf("\n"));
@@ -233,7 +233,7 @@ function extractDOMErrorText(errorText,stringType)
 	var reasonText = mainErrorBody.substring(mainErrorBody.indexOf(":")+1);
 	var alertText = "";
 	alertText += "-------------------------------------------\n";
-	alertText += "Error Occurred While Parsing " + stringType + " :\n";
+	alertText += "Error Occurred While Parsing XML :\n";
 	alertText += "-------------------------------------------\n";
 	alertText += "Error Position :  " + positionText + "\n";
 	alertText += "Error Reason  : " + reasonText;
