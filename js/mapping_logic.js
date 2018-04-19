@@ -8,6 +8,7 @@ var inNameSpaceMap = new Object();
 var outNameSpaceMap = new Object();
 var finalNameSpaceMap = new Object();
 var inputXMLDoc, outputXMLDoc;
+var rawMapWindow, xslMapWindow, ESQLMapWindow;
 
 //******************************************************************
 
@@ -56,7 +57,8 @@ function showRawMapping()
 	}
 	inHTML += '</table>';
 	
-	var rawMapWindow = window.open('', 'rawMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
+	if (rawMapWindow) {rawMapWindow.close();}
+	rawMapWindow = window.open('', 'rawMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
     rawMapWindow.document.write(inHTML);
 }
 
@@ -93,7 +95,9 @@ function showESQLMapping()
 		
 		esqlHTML = esqlHTML + 'SET OutputRoot.XMLNSC'+ targetPath + ' = InputRoot.XMLNSC' + sourcePath + ';\n';
 	}
-	var ESQLMapWindow = window.open('', 'ESQLMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
+	
+	if (ESQLMapWindow) {ESQLMapWindow.close();}
+	ESQLMapWindow = window.open('', 'ESQLMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
     ESQLMapWindow.document.write('<p align="center"><textarea rows="25" cols="100" spellcheck="false" wrap="off" >' + esqlHTML + '</textarea></p>');
 }
 
@@ -186,7 +190,6 @@ function createXSLT()
 				var nodeElement;
 				if(objectType == "Attribute")
 				{
-					//var attName = targetElements[j].substring(1, targetElements[j].length - 1);
 					nodeElement = document.createElementNS(xslNS,"xsl:attribute");
 
 					nodeElement.setAttribute("name",element);
@@ -218,6 +221,7 @@ function createXSLT()
 	
 	var xslString = new XMLSerializer().serializeToString(styleSheetNode);
 	
-	var xslMapWindow = window.open('', 'xslMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
+	if (xslMapWindow) {xslMapWindow.close();}
+	xslMapWindow = window.open('', 'xslMapWindow', 'height=420px,width=750px,left=200px,top=100px,menubar=no,status=no,titlebar=no');
 	xslMapWindow.document.write('<p align="center"><textarea rows="25" cols="100" spellcheck="false" wrap="off" >'+formatXml(formatXml(xslString))+'</textarea></p>');
 }
