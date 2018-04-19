@@ -1,34 +1,51 @@
 
-function showRawXML(inElementId,outElementId,cType)
+function makeXMLTrees()
 {
-	var inElement	= document.getElementById(inElementId);
-	var outElement	= document.getElementById(outElementId);
+	var inSourceElement		= document.getElementById('sourceXML');
+	var outSourceElement	= document.getElementById('inDiv');
+	var cSourceType = 'in';
+					
+	var rawSourceXmlData = inSourceElement.value ;
+	outSourceElement.innerHTML = '';
 	
-	var buttonElement = document.getElementById("changeButton");
-	if(buttonElement)
-	{
-		buttonElement.value = "Make XML Tree" ;
-		buttonElement.onclick = function() {makeXMLTrees();}
-	}
+	var inTargetElement		= document.getElementById('targetXML');
+	var outTargetElement	= document.getElementById('outDiv');
+	var cTargetType = 'out';
+					
+	var rawTargetXmlData = inTargetElement.value ;
+	outTargetElement.innerHTML = '';
 	
-	outElement.style.display = 'none';
-	inElement.style.display = 'block';
-	
-	var connectionLines = document.getElementsByClassName("stable");
-	for(var i=0; i< connectionLines.length; i++)
+	if (xmlParsing_old(rawSourceXmlData,'Source XML') && xmlParsing_old(rawTargetXmlData,'Target XML'))
 	{
-		removeConnection(connectionLines[i]);
+		if(createXMLTree(rawSourceXmlData,outSourceElement,cSourceType) && createXMLTree(rawTargetXmlData,outTargetElement,cTargetType))
+		{	
+			inSourceElement.style.display = 'none';
+			outSourceElement.style.display = 'block';
+			
+			inTargetElement.style.display = 'none';
+			outTargetElement.style.display = 'block';
+			
+			var buttonElement = document.getElementById("changeButton");
+			if(buttonElement)
+			{
+				buttonElement.value = "Show Raw XMLs" ;
+				buttonElement.onclick = function() {showRawXMLs();}
+			}
+			idCounter = 0 ;
+			
+			var mapButtons = document.getElementsByClassName("map-button");
+			for(var i=0; i<mapButtons.length; i++)
+			{
+				mapButtons[i].style.visibility = "visible";
+			}
+			
+			var xmlButtons = document.getElementsByClassName("xml-button");
+			for(var i=0; i<xmlButtons.length; i++)
+			{
+				xmlButtons[i].disabled = true;
+			}
+		}
 	}
-	mappingArray.splice(0,mappingArray.length);
-	if(cType.toUpperCase() == 'IN')
-	{
-		inputXMLDoc = null;
-	}
-	else
-	{
-		outputXMLDoc = null;
-	}
-	outElement.innerHTML = '';
 }
 
 function createXMLTree(rawXmlData, OutElement, cType) 
@@ -151,6 +168,138 @@ function funcIterate(item, cType, cPath)
 	return parentTableElement;
 }
 
+function showRawXMLs()
+{
+	var inElement, outElement;
+	
+	var connectionLines = document.getElementsByClassName("stable");
+	for(var i = connectionLines.length; i > 0; i--)
+	{
+		removeConnection(connectionLines[i-1]);
+	}
+	
+	mappingArray.splice(0,mappingArray.length);
+	
+	inElement	= document.getElementById('sourceXML');
+	outElement	= document.getElementById('inDiv');
+	
+	outElement.style.display = 'none';
+	inElement.style.display = 'block';
+	outElement.innerHTML = '';
+	
+	inElement	= document.getElementById('targetXML');
+	outElement	= document.getElementById('outDiv');
+	
+	outElement.style.display = 'none';
+	inElement.style.display = 'block';
+	outElement.innerHTML = '';
+	
+	var buttonElement = document.getElementById("changeButton");
+	if(buttonElement)
+	{
+		buttonElement.value = "Make XML Trees" ;
+		buttonElement.onclick = function() {makeXMLTrees();}
+	}
+	
+	inputXMLDoc = null;
+	outputXMLDoc = null;
+	
+	var mapButtons = document.getElementsByClassName("map-button");
+	for(var i=0; i<mapButtons.length; i++)
+	{
+		mapButtons[i].style.visibility = "hidden";
+	}
+	
+	var xmlButtons = document.getElementsByClassName("xml-button");
+	for(var i=0; i<xmlButtons.length; i++)
+	{
+		xmlButtons[i].disabled = false;
+	}
+}
+
+function generalizeNSName(currentItem)
+{
+	var ndName = currentItem.nodeName;
+	var ns = ndName.substring(0, ndName.indexOf(':'));
+	var el = ndName.substring(ndName.indexOf(':')+1);
+	if(Object.keys(finalNameSpaceMap).length == 0)
+	{
+		inNameSpaceMap[ns] = '';
+		finalNameSpaceMap['NS0'] = '';
+		ns = 'NS0';
+	}
+	
+	if(ns.length != 0)
+	{
+		for(var key in finalNameSpaceMap)
+		{
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == inNameSpaceMap[ns]))
+			{
+				ns = key;
+				break;
+			}
+		}
+		ns = ns + ':';
+	}
+	return ns + el;
+}
+
+function addNameSpace(attributeObject, cType)
+{
+	var result = false;
+	if(cType.toUpperCase() == 'IN')
+	{
+		inNameSpaceMap[attributeObject.name.substring(6)] = attributeObject.value;
+		var nsFound = false;
+		for(var key in finalNameSpaceMap)
+		{
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == ''))
+			{
+				nsFound = true;
+				finalNameSpaceMap[key] = attributeObject.value;
+				break;
+			}
+			
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == attributeObject.value))
+			{
+				nsFound = true;
+				break;
+			}
+		}
+		if(nsFound == false)
+		{
+			result = 'NS'+(Object.keys(finalNameSpaceMap).length);
+			finalNameSpaceMap[result] = attributeObject.value;
+		}
+	}
+	
+	if(cType.toUpperCase() == 'OUT')
+	{
+		outNameSpaceMap[attributeObject.name.substring(6)] = attributeObject.value;
+		var nsFound = false;
+		for(var key in finalNameSpaceMap)
+		{
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == ''))
+			{
+				nsFound = true;
+				finalNameSpaceMap[key] = attributeObject.value;
+				break;
+			}
+			
+			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == attributeObject.value))
+			{
+				nsFound = true;
+				break;
+			}
+		}
+		if(nsFound == false)
+		{
+			result = 'NS'+(Object.keys(finalNameSpaceMap).length);
+			finalNameSpaceMap[result] = attributeObject.value;
+		}
+	}
+	return result;
+}
 
 function getAttributesTable(currentItem, attributeList, cType, cLocalPath)
 {
@@ -210,7 +359,6 @@ function getAttributesNameValueVisual(attributeObject,cType)
 			if(resultNS)
 			{
 				attributeObject.name = 'xmlns:'+resultNS;
-				//inputXMLDoc.documentElement.innerHTML = inputXMLDoc.documentElement.innerHTML.replace('<'+attributeObject.name.substring(6)+':','<'+resultNS+':');
 			}
 		}
 		else

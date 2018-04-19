@@ -11,100 +11,6 @@ var inputXMLDoc, outputXMLDoc;
 
 //******************************************************************
 
-function makeXMLTrees()
-{
-	var inSourceElement		= document.getElementById('sourceXML');
-	var outSourceElement	= document.getElementById('inDiv');
-	var cSourceType = 'in';
-					
-	var rawSourceXmlData = inSourceElement.value ;
-	outSourceElement.innerHTML = '';
-	
-	var inTargetElement		= document.getElementById('targetXML');
-	var outTargetElement	= document.getElementById('outDiv');
-	var cTargetType = 'out';
-					
-	var rawTargetXmlData = inTargetElement.value ;
-	outTargetElement.innerHTML = '';
-	
-	if (xmlParsing_old(rawSourceXmlData,'Source XML') && xmlParsing_old(rawTargetXmlData,'Target XML'))
-	{
-		if(createXMLTree(rawSourceXmlData,outSourceElement,cSourceType) && createXMLTree(rawTargetXmlData,outTargetElement,cTargetType))
-		{	
-			inSourceElement.style.display = 'none';
-			outSourceElement.style.display = 'block';
-			
-			inTargetElement.style.display = 'none';
-			outTargetElement.style.display = 'block';
-			
-			var buttonElement = document.getElementById("changeButton");
-			if(buttonElement)
-			{
-				buttonElement.value = "Show Raw XML" ;
-				buttonElement.onclick = function() {showRawXMLs();}
-			}
-			idCounter = 0 ;
-			
-			var mapButtons = document.getElementsByClassName("map-button");
-			for(var i=0; i<mapButtons.length; i++)
-			{
-				mapButtons[i].style.visibility = "visible";
-			}
-			
-			var xmlButtons = document.getElementsByClassName("xml-button");
-			for(var i=0; i<xmlButtons.length; i++)
-			{
-				xmlButtons[i].disabled = true;
-			}
-		}
-	}
-}
-
-function showRawXMLs()
-{
-	showRawXML('sourceXML','inDiv','in');
-	showRawXML('targetXML','outDiv','out');
-	
-	var mapButtons = document.getElementsByClassName("map-button");
-	for(var i=0; i<mapButtons.length; i++)
-	{
-		mapButtons[i].style.visibility = "hidden";
-	}
-	
-	var xmlButtons = document.getElementsByClassName("xml-button");
-	for(var i=0; i<xmlButtons.length; i++)
-	{
-		xmlButtons[i].disabled = false;
-	}
-}
-
-function generalizeNSName(currentItem)
-{
-	var ndName = currentItem.nodeName;
-	var ns = ndName.substring(0, ndName.indexOf(':'));
-	var el = ndName.substring(ndName.indexOf(':')+1);
-	if(Object.keys(finalNameSpaceMap).length == 0)
-	{
-		inNameSpaceMap[ns] = '';
-		finalNameSpaceMap['NS0'] = '';
-		ns = 'NS0';
-	}
-	
-	if(ns.length != 0)
-	{
-		for(var key in finalNameSpaceMap)
-		{
-			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == inNameSpaceMap[ns]))
-			{
-				ns = key;
-				break;
-			}
-		}
-		ns = ns + ':';
-	}
-	return ns + el;
-}
-
 function ascendingSort(mappingArray)
 {
 	for (var i = 0; i < mappingArray.length; ++i)
@@ -121,68 +27,17 @@ function ascendingSort(mappingArray)
     }
 }
 
-function addNameSpace(attributeObject, cType)
-{
-	var result = false;
-	if(cType.toUpperCase() == 'IN')
-	{
-		inNameSpaceMap[attributeObject.name.substring(6)] = attributeObject.value;
-		var nsFound = false;
-		for(var key in finalNameSpaceMap)
-		{
-			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == ''))
-			{
-				nsFound = true;
-				finalNameSpaceMap[key] = attributeObject.value;
-				break;
-			}
-			
-			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == attributeObject.value))
-			{
-				nsFound = true;
-				break;
-			}
-		}
-		if(nsFound == false)
-		{
-			result = 'NS'+(Object.keys(finalNameSpaceMap).length);
-			finalNameSpaceMap[result] = attributeObject.value;
-		}
-	}
-	
-	if(cType.toUpperCase() == 'OUT')
-	{
-		outNameSpaceMap[attributeObject.name.substring(6)] = attributeObject.value;
-		var nsFound = false;
-		for(var key in finalNameSpaceMap)
-		{
-			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == ''))
-			{
-				nsFound = true;
-				finalNameSpaceMap[key] = attributeObject.value;
-				break;
-			}
-			
-			if(finalNameSpaceMap.hasOwnProperty(key) && (finalNameSpaceMap[key] == attributeObject.value))
-			{
-				nsFound = true;
-				break;
-			}
-		}
-		if(nsFound == false)
-		{
-			result = 'NS'+(Object.keys(finalNameSpaceMap).length);
-			finalNameSpaceMap[result] = attributeObject.value;
-		}
-	}
-	return result;
-}
-
 /* **************************************************
 ******** Showing the Raw Mapping Table **************
 ************************************************** */
 function showRawMapping()
 {
+	if(mappingArray.length == 0)
+	{
+		alert("Nothing has been mapped.\nPlease start mapping by connecting the nodes first.");
+		return;
+	}
+	
 	ascendingSort(mappingArray);
 	var cStyle = "border:1px solid red; border-collapse:collapse; padding:8px;";
 	var inHTML = '<table style="' + cStyle + '">';
@@ -210,6 +65,12 @@ function showRawMapping()
 ************************************************** */
 function showESQLMapping()
 {
+	if(mappingArray.length == 0)
+	{
+		alert("Nothing has been mapped.\nPlease start mapping by connecting the nodes first.");
+		return;
+	}
+	
 	var sourcePath, targetPath;
 	ascendingSort(mappingArray);
 	
@@ -241,6 +102,12 @@ function showESQLMapping()
 ************************************************** */
 function createXSLT()
 {
+	if(mappingArray.length == 0)
+	{
+		alert("Nothing has been mapped.\nPlease start mapping by connecting the nodes first.");
+		return;
+	}
+	
 	ascendingSort(mappingArray);
 	
 	var xslNS = "http://www.w3.org/1999/XSL/Transform";
@@ -314,7 +181,7 @@ function createXSLT()
 				element = nsKey + ":" + element;
 			}
 			
-			if (! templateNode.getElementsByTagName(element)[0])
+			if (! tempNode.getElementsByTagName(element)[0])
 			{
 				var nodeElement;
 				if(objectType == "Attribute")

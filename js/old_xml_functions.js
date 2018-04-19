@@ -64,15 +64,7 @@ function xmlParsingWithoutErr_old(xmlString)
 function formatTextArea_old(textAreaId)
 {
 	var rawXmlData = document.getElementById(textAreaId).value ;
-	var docType;
-	if (textAreaId == 'xsltData')
-	{
-		docType = 'XSLT';
-	}
-	else if(textAreaId == 'inputXmlData')
-	{
-		docType = 'XML';
-	}
+	var docType = getDocType(textAreaId);
 	
 	document.getElementById(textAreaId).value = formatXmlWithoutErr_old(formatXml_old(rawXmlData,docType)) ;
 }
@@ -211,9 +203,7 @@ function deleteEmptyNodesFromTextArea_old(textAreaId)
 	var rawXmlData = document.getElementById(textAreaId).value ;
 	var outputXml = "" ;
 	var indentCount = -1 ;
-	var docType;
-	if (textAreaId == 'xsltData'){docType = 'XSLT';}
-	else if(textAreaId == 'inputXmlData'){docType = 'XML';}
+	var docType = getDocType(textAreaId);
 	
 	var cleanedRawData = rawXmlData.replace(/>\s*</g,"><").replace(/\n/g,"");
 	var xmlDoc = xmlParsing_old(cleanedRawData, docType);		
@@ -260,15 +250,7 @@ function deleteCommentsFromTextArea_old(textAreaId)
 	var rawXmlData = document.getElementById(textAreaId).value ;
 	var outputXml = "" ;
 	var indentCount = -1 ;
-	var docType;
-	if (textAreaId == 'xsltData')
-	{
-		docType = 'XSLT';
-	}
-	else if(textAreaId == 'inputXmlData')
-	{
-		docType = 'XML';
-	}
+	var docType = getDocType(textAreaId);
 	
 	var cleanedRawData = rawXmlData.replace(/>\s*</g,"><").replace(/\n/g,"");
 	var xmlDoc = xmlParsing_old(cleanedRawData, docType);		
@@ -316,26 +298,33 @@ function extractDOMErrorText_old(errorText, docType)
 	var positionText = mainErrorBody.substring(0, mainErrorBody.indexOf(":"));
 	var reasonText = mainErrorBody.substring(mainErrorBody.indexOf(":")+1);
 	var alertText = "";
-	alertText = alertText + "-------------------------------------------\n";
-	alertText = alertText + "Error Occurred While Parsing : "+ docType + "\n";
-	alertText = alertText + "-------------------------------------------\n";
-	alertText = alertText + "Error Position :  " + positionText + "\n";
-	alertText = alertText + "Error Reason  : " + reasonText;
+	alertText += "------------------------------------------------\n";
+	alertText += "Error Occurred While Parsing : "+ docType + "\n";
+	alertText += "------------------------------------------------\n";
+	alertText += "Error Position :  " + positionText + "\n";
+	alertText += "Error Reason  : " + reasonText;
 	alert(alertText);
 }
 
 function makeLinearXML_old(textAreaId)
 {
 	var rawXmlData = document.getElementById(textAreaId).value ;
-	var docType;
-	if (textAreaId == 'xsltData')
+	var docType = getDocType(textAreaId);
+	
+	if (xmlParsing_old(rawXmlData, docType))
 	{
-		docType = 'XSLT';
+		document.getElementById(textAreaId).value = formatXmlWithoutErr_old(formatXml_old(rawXmlData,docType)).replace(/>\s*</g,"><");
 	}
-	else if(textAreaId == 'inputXmlData')
-	{
-		docType = 'XML';
-	}
+}
 
-	document.getElementById(textAreaId).value = formatXmlWithoutErr_old(formatXml_old(rawXmlData,docType)).replace(/>\s*</g,"><");
+function getDocType(textAreaId)
+{
+	if (textAreaId == 'sourceXML')
+	{
+		return 'Source XML';
+	}
+	else if(textAreaId == 'targetXML')
+	{
+		return 'Target XML';
+	}
 }

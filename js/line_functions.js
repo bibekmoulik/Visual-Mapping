@@ -122,13 +122,13 @@ function setSource(mouseDownEvent,cType,id)
 
 function removeConnection(line)
 {
-	for(var i=0; i< mappingArray.length; i++)
+	for(var x=0; x< mappingArray.length; x++)
 	{
-		var mapElement = mappingArray[i];
+		var mapElement = mappingArray[x];
 		if(mapElement[2] == line.id)
 		{
 			document.getElementById(mapElement[1]).innerHTML = document.getElementById(mapElement[1]).innerHTML.replace(String.fromCharCode(8855), String.fromCharCode(8853));
-			mappingArray.splice(i, 1);
+			mappingArray.splice(x, 1);
 			break;
 		}
 	}	

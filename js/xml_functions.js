@@ -6,24 +6,12 @@ function xmlParsing(xmlString)
 	{
 		parser = new DOMParser();
 		xmlDoc = parser.parseFromString(xmlString ,"text/xml");
-		//alert(xmlDoc.parseError.reason);
-		//if(xmlDoc.getElementsByTagName("parsererror").length > 0 )
-		//{
-		//	extractDOMErrorText(xmlDoc.getElementsByTagName("parsererror")[0].innerText);
-		//	xmlDoc = false ;
-		//}
 	}
 	else
 	{
 		xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
 		xmlDoc.async = false;
 		xmlDoc.loadXML(xmlString);
-		//if(xmlDoc.parseError.errorCode != 0 )
-		//{
-		//	alert("Invalid XML : " + xmlDoc.parseError.reason + "\nLineNumber : "
-		//	+xmlDoc.parseError.line+"\nPosition : "+xmlDoc.parseError.linepos);
-		//	xmlDoc = false ;
-		//}
 	}
 	return xmlDoc;
 }
