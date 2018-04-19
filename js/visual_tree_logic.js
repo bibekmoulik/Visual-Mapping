@@ -29,7 +29,7 @@ function makeXMLTrees()
 			if(buttonElement)
 			{
 				buttonElement.value = "Show Raw XMLs" ;
-				buttonElement.onclick = function() {showRawXMLs();}
+				buttonElement.onclick = function() {ajaxShowRawXMLs();}
 			}
 			idCounter = 0 ;
 			
@@ -198,7 +198,7 @@ function showRawXMLs()
 	if(buttonElement)
 	{
 		buttonElement.value = "Make XML Trees" ;
-		buttonElement.onclick = function() {makeXMLTrees();}
+		buttonElement.onclick = function() {ajaxShowRawXMLs();}
 	}
 	
 	inputXMLDoc = null;
@@ -423,7 +423,7 @@ function toggleVisibility(idCounter,cType)
 			collapsibleBlock.innerHTML = collapsibleBlock.innerHTML.replace('-','+');
 		}
 	}
-	toggleConnectionCollapse(idCounter,cType);
+	toggleConnectionCollapse();
 }
 
 function createMapElementTd(cPath, id, cType)
@@ -603,7 +603,7 @@ function getOffsetSum(elem)
 }
 
 
-function toggleConnectionCollapse(idCounter,cType)
+function toggleConnectionCollapse()
 {
 	var sourceId,targetId,lineId,mapTdPosition,newLineSourceX,newLineSourceY,newLineTargetX,newLineTargetY,newLine,mapId,pathId;
 	

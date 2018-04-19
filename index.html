@@ -17,6 +17,7 @@
 		<script type="text/javascript" src="js/old_xml_functions.js"></script>
 		<script type="text/javascript" src="js/visual_tree_logic.js"></script>
 		<script type="text/javascript" src="js/line_functions.js"></script>
+		<script type="text/javascript" src="js/ajax_functions.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script>
 			$(document).ready(function(){
@@ -30,7 +31,7 @@
 		</script>
 	</head>
 	
-	<body class="noselect" onmouseup='mouseUpFunc(event)' onmousemove='mouseMoveFunc(event)'>
+	<body class="noselect" onmouseup="mouseUpFunc(event)" onmousemove="mouseMoveFunc(event)" onresize="toggleConnectionCollapse()">
 
 		<!--**************************************************-->
 		<!--***************** Raw XML table ******************-->
@@ -40,24 +41,24 @@
 			<tr style="width:100%;height:80%;">
 				<td colspan="1" style="text-align:left;"><h3>Source XML</h3></td>
 				<td colspan="2" rowspan="2" style="width:20%;height:100%;text-align:center;vertical-align:middle;">
-					<input id="changeButton" type="button" class="change-button" onClick="makeXMLTrees();" value="Make XML Trees"/>
+					<input id="changeButton" type="button" class="change-button" onClick="ajaxMakeXMLTrees();" value="Make XML Trees"/>
 				</td>
 				<td colspan="1" style="text-align:right;"><h3>Target XML</h3></td>
 			</tr>
 			
 			<tr style="width:100%;height:10%;">
 				<td style="width:40%;height:100%;text-align:left;">
-					<input type="button" class="xml-button" onclick="formatTextArea_old('sourceXML')" value="Format XML" title="Format into Structured XML Form"/>
-					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea_old('sourceXML')" value="Delete Comments" title="Delete All Commented Lines"/>
-					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea_old('sourceXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
-					<input type="button" class="xml-button" onclick="makeLinearXML_old('sourceXML')" value="Make Linear XML" title="Make Linear XML"/>
+					<input type="button" class="xml-button" onclick="ajaxFormatTextArea_old('sourceXML')" value="Format XML" title="Format into Structured XML Form"/>
+					<input type="button" class="xml-button" onclick="ajaxDeleteCommentsFromTextArea_old('sourceXML')" value="Delete Comments" title="Delete All Commented Lines"/>
+					<input type="button" class="xml-button" onclick="ajaxDeleteEmptyNodesFromTextArea_old('sourceXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
+					<input type="button" class="xml-button" onclick="ajaxMakeLinearXML_old('sourceXML')" value="Make Linear XML" title="Make Linear XML"/>
 				</td>
 				
 				<td style="width:40%;height:100%;text-align:right;">
-					<input type="button" class="xml-button" onclick="formatTextArea_old('targetXML')" value="Format XML" title="Format into Structured XML Form"/>
-					<input type="button" class="xml-button" onclick="deleteCommentsFromTextArea_old('targetXML')" value="Delete Comments" title="Delete All Commented Lines"/>
-					<input type="button" class="xml-button" onclick="deleteEmptyNodesFromTextArea_old('targetXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
-					<input type="button" class="xml-button" onclick="makeLinearXML_old('targetXML')" value="Make Linear XML" title="Make Linear XML"/>
+					<input type="button" class="xml-button" onclick="ajaxFormatTextArea_old('targetXML')" value="Format XML" title="Format into Structured XML Form"/>
+					<input type="button" class="xml-button" onclick="ajaxDeleteCommentsFromTextArea_old('targetXML')" value="Delete Comments" title="Delete All Commented Lines"/>
+					<input type="button" class="xml-button" onclick="ajaxDeleteEmptyNodesFromTextArea_old('targetXML')" value="Delete Empty Tags" title="Delete All Empty Fields"/>
+					<input type="button" class="xml-button" onclick="ajaxMakeLinearXML_old('targetXML')" value="Make Linear XML" title="Make Linear XML"/>
 				</td>
 			</tr>
 			
@@ -100,10 +101,9 @@
 				<td style="width:50%">
 					<br/>
 					<br/>
-					<input type="button" class="map-button" value="Refresh Connections" onClick="toggleConnectionCollapse('','')"/>
-					<input type="button" class="map-button" value="Show Raw Mapping" onClick="showRawMapping()"/>
-					<input type="button" class="map-button" value="Show ESQL Mapping" onClick="showESQLMapping()"/>
-					<input type="button" class="map-button" value="Show XSLT Mapping" onClick="createXSLT()"/>
+					<input type="button" class="map-button" value="Show Raw Mapping" onClick="ajaxShowRawMapping()"/>
+					<input type="button" class="map-button" value="Show ESQL Mapping" onClick="ajaxShowESQLMapping()"/>
+					<input type="button" class="map-button" value="Show XSLT Mapping" onClick="ajaxCreateXSLT()"/>
 				</td>
 			</tr>
 		</table>
@@ -111,9 +111,8 @@
 		<!--**************************************************-->
 		<!--***************** Waiting Logo *******************-->
 		<!--**************************************************-->
-		<!--p id="pdhurr"><div id="iii" style="width:200px; border: 1px solid black; text-align:center;"></div></p-->
 		<div id="loading-screen" class="loading-screen">
-			<img src="images/logo.png"></img>
+			<img src="images/loading.gif" style="vertical-align:middle; text-align:center;"></img>
 		</div>
 		
 		
