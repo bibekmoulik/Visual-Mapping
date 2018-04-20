@@ -198,7 +198,7 @@ function showRawXMLs()
 	if(buttonElement)
 	{
 		buttonElement.value = "Make XML Trees" ;
-		buttonElement.onclick = function() {ajaxShowRawXMLs();}
+		buttonElement.onclick = function() {ajaxMakeXMLTrees();}
 	}
 	
 	inputXMLDoc = null;

@@ -1,5 +1,5 @@
 /* Beginning of Scroll-Bar */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     width:6px;
 	height:6px;
 	cursor:pointer;
@@ -9,7 +9,7 @@
 }
 ::-webkit-scrollbar-thumb {
     background: black; 
-}
+} */
 /* Beginning of Scroll-Bar */
 
 .branchLink td {
@@ -79,14 +79,6 @@
      user-select:none;
 }
 
-
-
-
-
-
-/****************************************/
-/****************************************/
-/****************************************/
 /****************************************/
 /* Beginning of Position Properties */
  .w3-display-topleft{
@@ -120,6 +112,15 @@
      transform:translate(-50%,0%);
      -ms-transform:translate(-50%,0%) 
 }
+
+ .w3-display-middle{
+     position:absolute;
+     left:50%;
+     top:50%;
+     transform:translate(-50%,50%);
+     -ms-transform:translate(-50%,50%) 
+}
+
  .w3-display-bottommiddle{
      position:absolute;
      left:50%;
@@ -128,28 +129,7 @@
      -ms-transform:translate(-50%,0%) 
 }
 /* End of Position Properties */
-/* .input-div{
-	width:100%;
-	height:80%;
-}
-.source-div{
-	width:48%;
-	height:100%;
-	position:absolute;
-	top:50%;
-	left:1%;
-	transform:translate(0%,-50%);
-	-ms-transform:translate(0%,-50%);
-}
-.target-div{
-	width:48%;
-	height:100%;
-	position:absolute;
-	top:50%;
-	right:1%;
-	transform:translate(0%,-50%);
-	-ms-transform:translate(0%,-50%);
-} */
+
  textarea {
      resize:none;
      font-family: "Arial", Helvetica, sans-serif;
@@ -160,18 +140,6 @@
 	 margin:auto;
 	 
 }
-/* .display-tree-div{
-	width:99%;
-	height:70%;
-	display:none;
-}
-
-
-.xml-buttons-div{
-	width:99%;
-	height:10%;
-	vertical-align:middle;
-} */
 
 .xml-button, .map-button, .change-button{
 	cursor: pointer;
@@ -182,13 +150,26 @@
 }
 
 .loading-screen{
+	z-index:2;
 	width:100%;
 	height:100%;
+	cursor:wait;
 	display:none;
-	background-color:rgba(0,0,0,0.5);
+	background-color:rgba(0,0,0,0.2);
 	position:absolute;
 	left:0;
 	top:0;
 	text-align:center;
 	vertical-align:middle;
+}
+
+.loading-text{
+	padding:16px;
+	color:white;
+	background-color:rgba(0,0,0,0.5);
+	position:absolute;
+	left:50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+	-ms-transform:translate(-50%,-50%);
 }

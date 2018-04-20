@@ -27,6 +27,9 @@
 				$(document).ajaxComplete(function(){
 					$("#loading-screen").css("display", "none");
 				});
+				$("#loading-screen").bind("mousewheel", function() {
+					return false;
+				});
 			});
 		</script>
 	</head>
@@ -109,12 +112,11 @@
 		</table>
 		
 		<!--**************************************************-->
-		<!--***************** Waiting Logo *******************-->
+		<!--**************** Waiting Screen ******************-->
 		<!--**************************************************-->
 		<div id="loading-screen" class="loading-screen">
-			<img src="images/loading.gif" style="vertical-align:middle; text-align:center;"></img>
+			<h2 id="loading-text" class="loading-text">Processing.. Please Wait..</h2>
 		</div>
-		
 		
 	</body>
 </html>
